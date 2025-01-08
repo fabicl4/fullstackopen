@@ -1,6 +1,6 @@
 Solutions of part 1 exercises to this folder
 
-In this part, i solved all exercises of the introdemo app. You can see the current result (it may or may not be finished and submitted at time)
+In this part, i solved all exercises of the introdemo, unicafe and anecdote apps. You can see the current result (it may or may not be finished and submitted at time)
 
 [ ] Submitted?
 
