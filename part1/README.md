@@ -2,6 +2,8 @@ Solutions of part 1 exercises to this folder
 
 In this part, i solved all exercises of the introdemo, unicafe and anecdote apps. You can see the current result (it may or may not be finished and submitted at time)
 
+Note: introdemo app is the same as the courseinfo app. In part2, introdemo is renamed as courseinfo
+
 [ ] Submitted?
 
 Part 1.1 to 1.5 introdemo
