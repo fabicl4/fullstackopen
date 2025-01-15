@@ -1,19 +1,26 @@
-export default function Country ({country}) {
-    console.log(country)
-    /*
-    <ul>
-                {country.languages.map(({key, value}) => {
-                    <li key={key}>{value}</li>
-                })}
-            </ul>
-    */
+export default function Country ({country, toggleShown}) {
+    //console.log(country)
 
     return (
         <>
-            <h1>{country.common}</h1>
-            <p>capital {country.capital}</p>
-            <b>languages:</b>
-            
+        <p>{country.name}</p>
+        <button onClick={() => toggleShown(country.name)}>{country.shown ? 'hide' : 'show'}</button>
+            {country.shown &&
+                (<>
+                    <h1>{country.name}</h1>
+                    <p>capital {country.capital}</p>
+                    <p>area {country.area}</p>
+                    <b>languages:</b>
+                    <ul>
+                        {
+                            Object.values(country.languages).map(language => {
+                                return <li key={language}>{language}</li>
+                            })
+                        }
+                    </ul>
+                    <img src={country.flags.svg} alt={country.flags.alt} width={100}/>
+                </>)
+            }
         </>
     )
 }
