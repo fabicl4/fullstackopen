@@ -22,6 +22,7 @@ const App = () => {
         setPersons(initialPersons)
       })
   }, []) // dependency parameter
+
   console.log('render', persons.length, 'persons')
 
   //Note: newNumber is a string to be able to write number like 040-123456
@@ -36,8 +37,8 @@ const App = () => {
     //Note: This app is case sensitive!!!
     const foundPerson = persons.find(personObj => personObj.name === newName)
     if (foundPerson) {
-      alert(`${newName} is already added to phonebook`)
-      /*
+     // alert(`${newName} is already added to phonebook`)
+      
       if (confirm(`${newName} is already to phonebook, replace the old number with the new one?`)) {
         const changedPerson = { ...foundPerson, number: newNumber}
         personsServices
@@ -59,7 +60,7 @@ const App = () => {
             setPersons(persons.filter(p => p.id !== foundPerson.id))
             //console.log(error)
           })
-      }*/
+      }
     }
     else {
       // create the new person
@@ -106,21 +107,20 @@ const App = () => {
   // exercise 2.14
   // delete an entry from the phonebook
   function handleDelete (person) {
-    if (confirm(`Delete ${person.name}?`))
-    { // user confirms he/she wants to delete an entry from the phonebook
+    if (confirm(`Delete ${person.name}?`)) { // user confirms he/she wants to delete an entry from the phonebook
       personsServices
         .remove(person.id)
-        .then (request => {
-          //console.log(request)
+        .then (result => {
+          console.log(result)
           // Note: we could make a new getAll request, instead i create a new array of persons where that entry does not exists!
-          setPersons(persons.filter(person => person.id !== request.data.id))
+          setPersons(persons.filter(p => p.id !== person.id))
         })
         .catch(error => { // If we try to delete an entry that already has been removed, it will cause an error.
           setNotificationMessage({
-            message: `Cannot remove ${foundPerson.name}, he/she has already been removed from the server`,
+            message: `Cannot remove ${person.name}, he/she has already been removed from the server`,
             isError: true
           })
-          setPersons(persons.filter(p => p.id !== foundPerson.id))
+          setPersons(persons.filter(p => p.id !== person.id))
           //console.log(error)
         })
     }

@@ -1,4 +1,8 @@
 const express = require('express')
+// 3.c update
+const mongoose = require('mongoose')
+require('dotenv').config()
+
 const app = express()
 
 let notes = [
@@ -24,10 +28,42 @@ app.use(express.json())
 app.get('/', (request, response) => {
     response.send('<h1>Hello World!</h1>')
 })
-  
+
+/* 
+  Update version - 3.c. Connecting the backend to a database
+*/
+
+const url = process.env.MONGODB_URI;
+
+mongoose.set('strictQuery',false)
+
+mongoose.connect(url)
+
+const noteSchema = new mongoose.Schema({
+  content: String,
+  important: Boolean,
+})
+
+const Note = mongoose.model('Note', noteSchema)
+
+const note = new Note({ // example note
+  content: 'HTML is easy',
+  important: true,
+})
+
+app.get('/api/notes', (request, response) => {
+  Note.find({}).then(notes => {
+    response.json(notes)
+  })
+})
+
+// When should i close the connexion??
+
+///////////////////////////////////////////////////////////
+/*
 app.get('/api/notes', (request, response) => {
     response.json(notes)
-})
+})*/
 
 app.get('/api/notes/:id', (request, response) => {
     const id = request.params.id

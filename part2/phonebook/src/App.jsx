@@ -115,10 +115,10 @@ const App = () => {
         })
         .catch(error => { // If we try to delete an entry that already has been removed, it will cause an error.
           setNotificationMessage({
-            message: `Cannot remove ${foundPerson.name}, he/she has already been removed from the server`,
+            message: `Cannot remove ${person.name}, he/she has already been removed from the server`,
             isError: true
           })
-          setPersons(persons.filter(p => p.id !== foundPerson.id))
+          setPersons(persons.filter(p => p.id !== person.id))
           //console.log(error)
         })
     }

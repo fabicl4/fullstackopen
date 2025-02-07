@@ -4,9 +4,9 @@ export default function Persons({persons, handleDelete}) {
     // In this case, as said in exercise 2.6, we're using the person's name as a value of the key property
     // In exercise 2.7, we prevent the user from adding two or more times the same name!!
     const result = persons.map(person => {
-        //console.log(person.name)
+        //console.log(person)
         return (
-            <div key={person.name}>
+            <div key={person.id}>
                 <p>{person.name} {person.number}</p>
                 <button onClick={() => handleDelete(person)}>delete</button>
             </div>
