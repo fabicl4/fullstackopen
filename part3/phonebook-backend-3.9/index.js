@@ -6,31 +6,6 @@ app.use(express.static('dist'))
 
 const Person = require('./models/person')
 
-/*
-let persons = [
-    { 
-      "id": "1",
-      "name": "Arto Hellas", 
-      "number": "040-123456"
-    },
-    { 
-      "id": "2",
-      "name": "Ada Lovelace", 
-      "number": "39-44-5323523"
-    },
-    { 
-      "id": "3",
-      "name": "Dan Abramov", 
-      "number": "12-43-234345"
-    },
-    { 
-      "id": "4",
-      "name": "Mary Poppendieck", 
-      "number": "39-23-6423122"
-    }
-]
-*/
-
 const requestLogger = (request, response, next) => {
   console.log('Method:', request.method)
   console.log('Path:  ', request.path)
@@ -147,15 +122,10 @@ app.put('/api/persons/:id', (request, response, next) => {
   
   const {name, number} = request.body
 
-  const person = {
-    name: name,
-    number: number,
-  }
-
   // 3.15-3.16 update.
   Person.findByIdAndUpdate(
     request.params.id, 
-    person, 
+    {name, number}, 
     { new: true, runValidators: true, context: 'query' }
   )
     .then(updatedPerson => {

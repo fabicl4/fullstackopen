@@ -28,9 +28,6 @@ const App = () => {
   //Note: newNumber is a string to be able to write number like 040-123456
   // In any case this value is check!
 
-  // Debug: elements in person
-  //console.log(persons)
-
   function addPerson (event) {
     event.preventDefault();
     // exercise 2.7. Prevent the user from being able to add names that already exist in the phonebook.
@@ -41,26 +38,42 @@ const App = () => {
       
       if (confirm(`${newName} is already to phonebook, replace the old number with the new one?`)) {
         const changedPerson = { ...foundPerson, number: newNumber}
+        console.log("Updated person", changedPerson)
+        
         personsServices
           .update(changedPerson.id, changedPerson)
           .then(returnedPerson => {
-            //console.log(returnedPerson)
+            // If we use json-server, a previouly deleted entry will trigger an exception
+            // that it's not the case when using the actual database.
+            // It returns a response with data equal to null.
+            console.log("Returned by update ", returnedPerson)
+            if (!returnedPerson) 
+            {
+              throw Error(`The entry ${changedPerson.name} does not exist!`)
+            }
+
             setPersons(persons.map(p => p.id !== foundPerson.id ? p : returnedPerson))
             setNotificationMessage({
               message: `${changedPerson.name} number was changed!`,
               isError: false
             })
-          })
-          .catch(error => {
-            //alert(`the person '${foundPerson.name}' was already deleted from server`)
+          }) // TODO: Multiple catch so it works either way!
+          .catch(error => { // FIX: If we try to update to an unvalid number this be triggered!!!!
+            // In a production build this catch it use for a invalid number!
+            // In a development build this catch triggers if an entry is removed from the phonebook!
+            // Invalid phone number! (400 bad request!)
+            console.log(error.response)
+
+            //`The person was already deleted from the phonebook ()
             setNotificationMessage({
               message: `Information of ${foundPerson.name} has already been removed from the server`,
               isError: true
             })
             setPersons(persons.filter(p => p.id !== foundPerson.id))
-            //console.log(error)
           })
+          
       }
+      // else do nothing
     }
     else {
       // create the new person
@@ -79,7 +92,16 @@ const App = () => {
             isError:false
           })
         })
-      //console.log(personObj.name)
+        .catch(error => {
+          // Unvalid person name and number.
+          console.log(error.response.data.error)
+          /*
+          setNotificationMessage({
+            message: "...",
+            isError: true
+          })
+          */
+        }) 
     }
 
     setNewName('')
