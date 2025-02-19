@@ -1,5 +1,6 @@
 const blogRouter = require('express').Router()
 const Blog = require('../models/blogList')
+const User = require('../models/user')
 
 blogRouter.get('/', async (request, response) => {
   // 4.8 refactor the route handler to use the async/await syntax instead of promises.
@@ -7,12 +8,32 @@ blogRouter.get('/', async (request, response) => {
     response.json(blogs)
   })*/
 
-  const blogs = await Blog.find({})
+  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 } )
   response.json(blogs)
 })
 
-blogRouter.post('/', async (request, response, next) => {
+blogRouter.post('/', async (request, response) => {
   const body = request.body
+  /**
+  * 4.17
+  * Modify adding new blogs so that when a new blog is created, any user from
+  * the database is designated as its creator
+  */
+  // To get any user you can use User.findOne({})
+  const users = await User.find({})
+  //const users = usersInDb.map(user => user.toJSON()) // parsed users
+
+  if (users.length <= 0 )
+  { // No user
+    return response.status(400).json(
+      {
+        error: 'no users in the database'
+      }
+    )
+  }
+
+  // get first user for example
+  const user = users[0]
 
   const blog = new Blog(
     {
@@ -20,19 +41,14 @@ blogRouter.post('/', async (request, response, next) => {
       author: body.author,
       url: body.url,
       likes: body.likes || 0,
+      user: user.id
     }
   )
 
-  //console.log(blog)
-
-  /*blog
-    .save()
-    .then(result => {
-      response.status(201).json(result)
-    }).catch(error => next(error))
-  */
-  // TODO: Eliminate try-catch
   const savedBlog = await blog.save()
+  user.blogs = user.blogs.concat(savedBlog._id)
+  await user.save()
+
   response.status(201).json(savedBlog)
 
 })
