@@ -17,7 +17,7 @@ usersRouter.get('/', async (request, response) => {
 usersRouter.post('/', async (request, response) => {
   const { username, name, password } = request.body
 
-  console.log(request.body)
+  //console.log('post new user',request.body)
 
   if (!password) {
     return response.status(400).json(

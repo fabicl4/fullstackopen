@@ -24,3 +24,10 @@ Notes:
 
 4.17
     Remenber that blogs can be deleted, but with the current code, if one blog is added to the user blogs, it cannot be deleted from the array.
+
+4.22
+    request.user represent the User object!
+
+4.23
+    Token changes are only asked to the post and delete operation, not update. 
+    In a real case, this changes should also be done!
