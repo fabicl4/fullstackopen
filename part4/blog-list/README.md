@@ -31,3 +31,5 @@ Notes:
 4.23
     Token changes are only asked to the post and delete operation, not update. 
     In a real case, this changes should also be done!
+
+Run npm test -- tests/blogList_api_test.js to run all test!
